@@ -1116,6 +1116,38 @@
     workbox-webpack-plugin "7.0.0"
     workbox-window "7.0.0"
 
+"@effect/schema@^0.64.14":
+  version "0.64.14"
+  resolved "https://registry.yarnpkg.com/@effect/schema/-/schema-0.64.14.tgz#93cc92ab3dd4426cefcbda5f7fe9fb4def57ed38"
+  integrity sha512-f/3glHpm+Qu7i6gK5FxNhxtXXB7NbQQ+r5kOXijFYGJIfUoYpF6GIjUxoKKRH9QLAeMaDeJLml076Yi3LTbUvg==
+
+"@evolu/common-react@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@evolu/common-react/-/common-react-7.0.0.tgz#e978e01028ccf4e7b828e2e6bda9f1b9dfca7788"
+  integrity sha512-5FYWZ1sskUrtGSg8wSjHGp3YWnMiM2OW75LCsfUq0nT4Aph+VnJ0A6+iRDnL4A0O/vl+MgEL6pcGainh7EXb1A==
+
+"@evolu/common-web@^7.0.1":
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/@evolu/common-web/-/common-web-7.0.1.tgz#75ef92147a892f896b04a96b8be86e1cd1aa5a39"
+  integrity sha512-CzHclh7V2C/Sl7BotLRVyCn41YLVKaPPNBdbOeywQOyVFdPXdbqgjCq1+vBtJP6WqH0QXE2C/Fj50y1ArapVLA==
+
+"@evolu/common@^4.1.1":
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/@evolu/common/-/common-4.1.1.tgz#a508fc521ff071748edd1e957e9ae9e4f3df54d2"
+  integrity sha512-DYWlgdLF5LS5AP7cjNdnyAr/LJwhMlOAvnucYn2YuTjmc1Uf48UfddaoV5l2YCuoaoxKDqI+9CVIc+Diy9WzUg==
+  dependencies:
+    "@noble/ciphers" "^0.5.1"
+    "@noble/hashes" "^1.4.0"
+    "@protobuf-ts/runtime" "^2.9.4"
+    "@scure/bip39" "^1.2.2"
+    kysely "^0.27.3"
+    nanoid "^5.0.6"
+
+"@evolu/react@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@evolu/react/-/react-7.0.0.tgz#c47a1bbfcdb597eb2c4dec50f6c4764abfa85a66"
+  integrity sha512-voMe8IeaMr+AlWJ+cg6nK5sRsxoCnsAY2w1C1Pu+mJuEcsAXlQlBI3EjQa/NY8HTKwkRdJjeyNXL2+6NDdRMIg==
+
 "@graphql-tools/merge@^8.4.1":
   version "8.4.2"
   resolved "https://registry.yarnpkg.com/@graphql-tools/merge/-/merge-8.4.2.tgz#95778bbe26b635e8d2f60ce9856b388f11fe8288"
@@ -1242,6 +1274,16 @@
   resolved "https://registry.yarnpkg.com/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-14.1.2.tgz#f37ef1bd9be045410f3c1392dc1e573025390e62"
   integrity sha512-pfASwanOd+yP3D80O63DuQffrBySZPuB7wRN0IGSRq/0rDm9p/MvvnLzzgP2kSiLOUklOrFYVax7P6AEzjGykQ==
 
+"@noble/ciphers@^0.5.1":
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/@noble/ciphers/-/ciphers-0.5.2.tgz#879367fd51d59185259eb844d5b9a78f408b4a12"
+  integrity sha512-GADtQmZCdgbnNp+daPLc3OY3ibEtGGDV/+CzeM3MFnhiQ7ELQKlsHWYq0YbYUXx4jU3/Y1erAxU6r+hwpewqmQ==
+
+"@noble/hashes@^1.4.0", "@noble/hashes@~1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-1.4.0.tgz#45814aa329f30e4fe0ba49426f49dfccdd066426"
+  integrity sha512-V1JJ1WTRUqHHrOSh597hURcMqVKVGL/ea3kv0gSnEdsEZ0/+VyPghM1lMNGc00z7CIQorSvbKpuJkxvuHbvdbg==
+
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz#7619c2eb21b25483f6d167548b4cfd5a7488c3d5"
@@ -1262,6 +1304,11 @@
   dependencies:
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
+
+"@protobuf-ts/runtime@^2.9.4":
+  version "2.9.4"
+  resolved "https://registry.yarnpkg.com/@protobuf-ts/runtime/-/runtime-2.9.4.tgz#db8a78b1c409e26d258ca39464f4757d804add8f"
+  integrity sha512-vHRFWtJJB/SiogWDF0ypoKfRIZ41Kq+G9cEFj6Qm1eQaAhJ1LDFvgZ7Ja4tb3iLOQhz0PaoPnnOijF1qmEqTxg==
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   version "1.1.2"
@@ -1352,6 +1399,24 @@
     "@types/estree" "0.0.39"
     estree-walker "^1.0.1"
     picomatch "^2.2.2"
+
+"@scure/base@~1.1.6":
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/@scure/base/-/base-1.1.6.tgz#8ce5d304b436e4c84f896e0550c83e4d88cb917d"
+  integrity sha512-ok9AWwhcgYuGG3Zfhyqg+zwl+Wn5uE+dwC0NV/2qQkx4dABbb/bx96vWu8NSj+BNjjSjno+JRYRjle1jV08k3g==
+
+"@scure/bip39@^1.2.2":
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@scure/bip39/-/bip39-1.3.0.tgz#0f258c16823ddd00739461ac31398b4e7d6a18c3"
+  integrity sha512-disdg7gHuTDZtY+ZdkmLpPCk7fxZSu3gBiEGuoC1XYxv9cGx3Z6cpTggCgW6odSOOIXCiDjuGejW+aJKCY/pIQ==
+  dependencies:
+    "@noble/hashes" "~1.4.0"
+    "@scure/base" "~1.1.6"
+
+"@sqlite.org/sqlite-wasm@^3.45.2-build1":
+  version "3.45.2-build1"
+  resolved "https://registry.yarnpkg.com/@sqlite.org/sqlite-wasm/-/sqlite-wasm-3.45.2-build1.tgz#e32c51a7f135a768e8a155e064a025366f03c376"
+  integrity sha512-TeQf8rNFQna8pg95IshtpXkhdMq1iNAXllCoNrhEn18660Hbal9yxKAYv+ZfC1kjfdEXMK6V0XanfX5OT5FyMw==
 
 "@surma/rollup-plugin-off-main-thread@^2.2.3":
   version "2.2.3"
@@ -2004,6 +2069,11 @@ ee-first@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
   integrity sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==
+
+effect@^2.4.14:
+  version "2.4.14"
+  resolved "https://registry.yarnpkg.com/effect/-/effect-2.4.14.tgz#6835bc76af18c1db7f61b8e692a13c252da900c8"
+  integrity sha512-uEw/M4sMxE2qfkrY9TcUHtHI1P1ffxk6KA/siVajb83IxIttX1i1F7folF6/vrGHrSWKI4fBdTfMg8wgXp4eKw==
 
 ejs@^3.1.6:
   version "3.1.9"
@@ -2733,6 +2803,11 @@ jsonpointer@^5.0.0:
   resolved "https://registry.yarnpkg.com/jsonpointer/-/jsonpointer-5.0.1.tgz#2110e0af0900fd37467b5907ecd13a7884a1b559"
   integrity sha512-p/nXbhSEcu3pZRdkW1OfJhpsVtW1gd4Wa1fnQc9YLiTfAjn0312eMKimbdIQzuZl9aa9xUGaRlP9T/CJE/ditQ==
 
+kysely@^0.27.3:
+  version "0.27.3"
+  resolved "https://registry.yarnpkg.com/kysely/-/kysely-0.27.3.tgz#6cc6c757040500b43c4ac596cdbb12be400ee276"
+  integrity sha512-lG03Ru+XyOJFsjH3OMY6R/9U38IjDPfnOfDgO3ynhbDr+Dz8fak+X6L62vqu3iybQnj+lG84OttBuU9KY3L9kA==
+
 leven@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/leven/-/leven-3.1.0.tgz#77891de834064cccba82ae7842bb6b14a13ed7f2"
@@ -2879,6 +2954,11 @@ nanoid@^3.3.6:
   version "3.3.7"
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.7.tgz#d0c301a691bc8d54efa0a2226ccf3fe2fd656bd8"
   integrity sha512-eSRppjcPIatRIMC1U6UngP8XFcz8MQWGQdt1MTBQ7NaAmvXDfvNxbvWV3x2y6CdEUciCSsDHDQZbhYaB8QEo2g==
+
+nanoid@^5.0.6:
+  version "5.0.6"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-5.0.6.tgz#7f99a033aa843e4dcf9778bdaec5eb02f4dc44d5"
+  integrity sha512-rRq0eMHoGZxlvaFOUdK1Ev83Bd1IgzzR+WJ3IbDJ7QOSdAxYjlurSPqFs9s4lJg29RT6nPwizFtJhQS6V5xgiA==
 
 negotiator@0.6.3, negotiator@^0.6.3:
   version "0.6.3"

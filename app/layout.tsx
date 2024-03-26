@@ -1,3 +1,4 @@
+import { EvoluProvider } from '@/components/providers/evoluProvider'
 import type { Metadata, Viewport } from 'next'
 import type { ReactNode } from 'react'
 
@@ -46,7 +47,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             }
             `}</style>
       </head>
-      <body>{children}</body>
+      <body>
+        <EvoluProvider>{children}</EvoluProvider>
+      </body>
     </html>
   )
 }
