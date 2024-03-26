@@ -1,0 +1,10 @@
+# Ignore artifacts:
+.next
+public
+build
+coverage
+pg_data
+strings
+styles
+lib/graphql/zeus
+app/api/graphql/nexus-typegen.ts

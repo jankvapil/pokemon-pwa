@@ -1,0 +1,29 @@
+{
+  "name": "@next-pwa-example/basic",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "format": "prettier . --write"
+  },
+  "dependencies": {
+    "@apollo/server": "^4.10.2",
+    "@as-integrations/next": "^3.0.0",
+    "@ducanh2912/next-pwa": "latest",
+    "graphql": "^16.8.1",
+    "graphql-tag": "^2.12.6",
+    "next": "14.1.2",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "20.11.24",
+    "@types/react": "18.2.63",
+    "@types/react-dom": "18.2.20",
+    "typescript": "5.3.3"
+  }
+}
