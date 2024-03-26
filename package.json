@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "zeus": "zeus ./app/api/graphql/schema.graphql ./lib/graphql/",
     "format": "prettier . --write"
   },
   "dependencies": {

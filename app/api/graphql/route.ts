@@ -29,7 +29,6 @@ const typeDefs = gql`
     evolutionRequirements: PokemonEvolutionRequirement
     maxHP: Int!
     image: String!
-    sound: String!
   }
 
   type PokemonConnection {
@@ -48,7 +47,6 @@ const typeDefs = gql`
 
   input PokemonFilterInput {
     type: String
-    isFavorite: Boolean
   }
 
   type PokemonAttack {

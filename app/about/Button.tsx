@@ -1,11 +1,32 @@
 'use client'
-import { useState } from 'react'
+import { useGraphQLClient } from '@/components/hooks/useGraphQLClient'
 
 export function Button() {
-  const [count, setCount] = useState(0)
+  const { query } = useGraphQLClient()
+
+  const handleOnClick = async () => {
+    const res = await query({
+      pokemons: [
+        {
+          query: {
+            offset: 2,
+          },
+        },
+        {
+          edges: {
+            id: true,
+            name: true,
+          },
+        },
+      ],
+    })
+
+    console.log(res)
+  }
+
   return (
-    <button type="button" onClick={() => setCount((_old) => _old + 1)}>
-      {count}
+    <button type="button" onClick={handleOnClick}>
+      Fetch pokemons
     </button>
   )
 }
