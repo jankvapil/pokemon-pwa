@@ -1,5 +1,5 @@
 import { Chain } from '@/lib/graphql/zeus'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 /**
  * Hook provides GraphQL client's functions for queries
@@ -10,8 +10,6 @@ export const useGraphQLClient = () => {
   if (!GRAPHQL_URL) {
     throw new Error('GraphQL URL env is not defined')
   }
-
-  console.log(GRAPHQL_URL)
 
   const zeusClient = Chain(GRAPHQL_URL, {
     headers: {
