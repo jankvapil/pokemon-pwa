@@ -1,7 +1,6 @@
-import { OwnerActions } from '@/components/ui/OwnerActions'
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Todos } from './Todos'
+import { PokemonsList } from './PokemonsList'
 
 export const metadata: Metadata = {
   title: 'Home',
@@ -10,10 +9,10 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <>
-      <h1>Next.js + PWA = AWESOME!</h1>
-      <Link href="/about">About page</Link>
-      <Todos />
-      <OwnerActions />
+      <h1>Homepage</h1>
+      <Link href="/favorites">Favorites</Link>
+
+      <PokemonsList />
     </>
   )
 }
