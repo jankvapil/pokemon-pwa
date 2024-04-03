@@ -3,6 +3,7 @@ import '@/styles/globals.css'
 import { EvoluProvider } from '@/components/providers/evoluProvider'
 import type { Metadata, Viewport } from 'next'
 import type { ReactNode } from 'react'
+import Link from 'next/link'
 
 const APP_NAME = 'next-pwa example'
 const APP_DESCRIPTION = 'This is an example of using next-pwa'
@@ -37,6 +38,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" dir="ltr">
       <body suppressHydrationWarning>
+        <header className="flex border-b py-3 justify-center gap-8">
+          <Link href="/">Home</Link>
+          <Link href="/favorites">Favorites</Link>
+        </header>
         <EvoluProvider>{children}</EvoluProvider>
       </body>
     </html>

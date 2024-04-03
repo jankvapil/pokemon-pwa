@@ -8,9 +8,6 @@ import Link from 'next/link'
 export default function Page() {
   return (
     <>
-      <h1 className="_h1">This will be locally stored favorite pokemons</h1>
-      <Link href="/">Home</Link>
-
       <Todos />
       <OwnerActions />
     </>
