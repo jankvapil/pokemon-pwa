@@ -89,15 +89,24 @@ const Todos: FC = () => {
             >
               {row.title}
             </span>
-            <button onClick={() => handleToggleCompletedClick(row)}>
+            <button
+              className="_btn"
+              onClick={() => handleToggleCompletedClick(row)}
+            >
               {row.isCompleted ? 'Completed' : 'Complete'}
             </button>
-            <button onClick={() => handleRenameClick(row)}>Rename</button>
-            <button onClick={() => handleDeleteClick(row)}>Delete</button>
+            <button className="_btn" onClick={() => handleRenameClick(row)}>
+              Rename
+            </button>
+            <button className="_btn" onClick={() => handleDeleteClick(row)}>
+              Delete
+            </button>
           </li>
         ))}
       </ul>
-      <button onClick={handleAddTodoClick}>Add Todo</button>
+      <button className="_btn" onClick={handleAddTodoClick}>
+        Add Todo
+      </button>
     </>
   )
 }

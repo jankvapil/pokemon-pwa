@@ -1,3 +1,5 @@
+import '@/styles/globals.css'
+
 import { EvoluProvider } from '@/components/providers/evoluProvider'
 import type { Metadata, Viewport } from 'next'
 import type { ReactNode } from 'react'

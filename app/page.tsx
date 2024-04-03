@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <>
-      <h1>Homepage</h1>
+      <h1 className="_h1">Homepage</h1>
       <Link href="/favorites">Favorites</Link>
 
       <PokemonsList />

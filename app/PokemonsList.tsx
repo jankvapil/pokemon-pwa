@@ -42,7 +42,9 @@ export const PokemonsList = () => {
   return (
     <ul>
       {pokemons.map((p) => (
-        <li key={p.id}>{p.name}</li>
+        <li className="border px-4" key={p.id}>
+          {p.name}
+        </li>
       ))}
     </ul>
   )

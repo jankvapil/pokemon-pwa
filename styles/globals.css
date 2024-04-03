@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  ._h1 {
+    @apply text-4xl
+  }
+
+  ._btn {
+    @apply border px-4 hover:bg-black hover:text-white
+  }
+}
