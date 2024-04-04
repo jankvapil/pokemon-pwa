@@ -38,10 +38,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" dir="ltr">
       <body suppressHydrationWarning>
-        <header className="flex border-b py-3 justify-center gap-8">
+        {/* <header className="flex border-b py-3 justify-center gap-8">
           <Link href="/">Home</Link>
           <Link href="/favorites">Favorites</Link>
-        </header>
+        </header> */}
         <EvoluProvider>{children}</EvoluProvider>
       </body>
     </html>

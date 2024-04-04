@@ -60,9 +60,17 @@ const TodoCategoryTable = table({
 })
 type TodoCategoryTable = S.Schema.Type<typeof TodoCategoryTable>
 
+// Now we can define tables.
+const PokemonTable = table({
+  id: TodoId,
+  name: NonEmptyString1000,
+})
+type PokemonTable = S.Schema.Type<typeof PokemonTable>
+
 // Now, we can define the database schema.
 const Database = database({
   todo: TodoTable,
+  pokemon: PokemonTable,
   todoCategory: TodoCategoryTable,
 })
 export type Database = S.Schema.Type<typeof Database>
