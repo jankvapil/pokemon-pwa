@@ -1,7 +1,7 @@
 'use client'
 
 import { useGraphQLClient } from '@/components/hooks/useGraphQLClient'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, use, useEffect, useState } from 'react'
 import { GraphQLTypes } from '@/lib/graphql/zeus'
 
 import {
@@ -11,6 +11,7 @@ import {
   cast,
   useEvolu,
   useQuery,
+  useQuerySubscription,
 } from '@evolu/react'
 import { type Database } from '@/components/providers/evoluProvider'
 import Link from 'next/link'
@@ -26,13 +27,16 @@ type Pokemon = Pick<GraphQLTypes['Pokemon'], 'name' | 'id'>
  * Pokemons list view
  */
 export const PokemonsList = (props: IPokemonsList) => {
+  const evolu = useEvolu()
   const { query } = useGraphQLClient()
   const { create } = useEvolu<Database>()
   const { createQuery, update } = useEvolu<Database>()
 
+  const [isLoading, setIsLoading] = useState(false)
   const [offset, setOffset] = useState(0)
   const [pokemons, setPokemons] = useState<Array<Pokemon>>([])
-  const favorites = createQuery(
+  const [favories, setFavorites] = useState<Readonly<Array<PokemonRow>>>([])
+  const favoritesQuery = createQuery(
     (db) =>
       db
         .selectFrom('pokemon')
@@ -48,16 +52,42 @@ export const PokemonsList = (props: IPokemonsList) => {
     }
   )
 
-  type PokemonRow = ExtractRow<typeof favorites>
-  const { rows } = useQuery(favorites)
+  const sub = useQuerySubscription(favoritesQuery)
+  type PokemonRow = ExtractRow<typeof favoritesQuery>
 
+  /**
+   * Subscribe for favorite pokemons changes in SQLite db
+   */
+  useEffect(() => {
+    setFavorites(sub.rows)
+  }, [sub])
+
+  /**
+   * Prefetch favorite pokemons from SQLite db
+   */
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      evolu
+        .loadQuery(favoritesQuery)
+        .then((res) => setFavorites(res.rows))
+        .catch((err) => console.error(err))
+    }
+
+    fetchFavorites()
+  }, [])
+
+  /**
+   * Fetch pokemons on page load or offset changes
+   */
   useEffect(() => {
     const fetchPokemons = async () => {
+      setIsLoading(true)
       query({
         pokemons: [
           {
             query: {
               offset: offset,
+              limit: 20,
             },
           },
           {
@@ -67,18 +97,21 @@ export const PokemonsList = (props: IPokemonsList) => {
             },
           },
         ],
-      }).then((res) => {
-        setPokemons((prev) => {
-          const filtered = res.pokemons.edges.filter(
-            (p) => !prev.map((p2) => p2.id).includes(p.id)
-          )
-          return [...prev, ...filtered]
-        })
       })
+        .then((res) => {
+          setPokemons((prev) => {
+            const filtered = res.pokemons.edges.filter(
+              (p) => !prev.map((p2) => p2.id).includes(p.id)
+            )
+            return [...prev, ...filtered]
+          })
+        })
+        .catch((err) => console.error(err))
+        .finally(() => setIsLoading(false))
     }
 
     fetchPokemons()
-  }, [rows, offset])
+  }, [offset])
 
   /**
    * Saves pokemon to db
@@ -95,19 +128,39 @@ export const PokemonsList = (props: IPokemonsList) => {
     update('pokemon', { id: row.id, isDeleted: true })
   }
 
+  /**
+   * Infifinite scroll
+   */
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop !==
+          document.documentElement.offsetHeight ||
+        isLoading
+      )
+        return
+
+      setOffset((prev) => prev + 10)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [isLoading])
+
+  const favNames = favories.map((fav) => fav.name)
   return (
     <>
       {props.showFavorites ? (
         <ul className="py-2">
-          {rows.map((row) => (
+          {favories.map((fav) => (
             <li
-              key={row.id}
+              key={fav.id}
               className="border-b py-3 flex justify-center items-center gap-3"
             >
-              <span className="text-lg font-bold">{row.name}</span>
+              <span className="text-lg font-bold">{fav.name}</span>
               <button
                 className="_btn py-2"
-                onClick={() => handleDeleteClick(row)}
+                onClick={() => handleDeleteClick(fav)}
               >
                 Delete
               </button>
@@ -117,7 +170,7 @@ export const PokemonsList = (props: IPokemonsList) => {
       ) : (
         <section className="flex flex-col gap-4">
           <ul>
-            {pokemons?.map((p) => (
+            {pokemons.map((p) => (
               <li className="border-b px-4 py-3 flex items-center" key={p.id}>
                 <span className="flex-1">
                   <Link href={`/${p.id}`}>
@@ -125,21 +178,20 @@ export const PokemonsList = (props: IPokemonsList) => {
                     {` (${p.id})`}
                   </Link>
                 </span>
-                <button
-                  className="border border-gray-200 rounded-full w-10 text-xl"
-                  onClick={() => makeFavorite(p)}
-                >
-                  &hearts;
-                </button>
+
+                {!favNames.includes(NonEmptyString1000(p.name)) && (
+                  <button
+                    className="border border-gray-200 rounded-full w-10 text-xl"
+                    onClick={() => makeFavorite(p)}
+                  >
+                    &hearts;
+                  </button>
+                )}
               </li>
             ))}
           </ul>
-          <button
-            className="_btn py-2"
-            onClick={() => setOffset((prev) => prev + 10)}
-          >
-            Load more
-          </button>
+
+          {isLoading && <div>Loading...</div>}
         </section>
       )}
     </>
