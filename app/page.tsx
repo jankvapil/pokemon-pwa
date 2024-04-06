@@ -2,15 +2,26 @@
 
 import { useState } from 'react'
 import { PokemonsList } from './PokemonsList'
+import { useSwipe } from '@/components/hooks/useSwipe'
 
 export default function Page() {
   const [showFavorites, setShowFavorites] = useState(false)
+  const swipeHandlers = useSwipe()
 
   return (
-    <>
-      <header className="flex border-b justify-center gap-8">
+    <div
+      onTouchStart={(e) => swipeHandlers.onTouchStart(e)}
+      onTouchMove={(e) => swipeHandlers.onTouchMove(e)}
+      onTouchEnd={() =>
+        swipeHandlers.onTouchEnd(
+          () => setShowFavorites(false),
+          () => setShowFavorites(true)
+        )
+      }
+    >
+      <header className="flex border-b justify-center">
         <button
-          className="w-32 py-3"
+          className="flex-1 py-4"
           style={{
             color: showFavorites ? 'black' : 'white',
             backgroundColor: showFavorites ? 'white' : 'black',
@@ -20,7 +31,7 @@ export default function Page() {
           All
         </button>
         <button
-          className="w-32 py-3"
+          className="flex-1 py-4"
           style={{
             color: showFavorites ? 'white' : 'black',
             backgroundColor: showFavorites ? 'black' : 'white',
@@ -34,6 +45,6 @@ export default function Page() {
         showFavorites={showFavorites}
         setShowFavorites={setShowFavorites}
       />
-    </>
+    </div>
   )
 }

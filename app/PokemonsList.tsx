@@ -21,7 +21,7 @@ type IPokemonsList = {
   setShowFavorites: Dispatch<SetStateAction<boolean>>
 }
 
-type Pokemon = Pick<GraphQLTypes['Pokemon'], 'name' | 'id'>
+type Pokemon = Pick<GraphQLTypes['Pokemon'], 'name' | 'id' | 'image'>
 
 /**
  * Pokemons list view
@@ -94,6 +94,7 @@ export const PokemonsList = (props: IPokemonsList) => {
             edges: {
               id: true,
               name: true,
+              image: true,
             },
           },
         ],
@@ -171,8 +172,17 @@ export const PokemonsList = (props: IPokemonsList) => {
         <section className="flex flex-col gap-4">
           <ul>
             {pokemons.map((p) => (
-              <li className="border-b px-4 py-3 flex items-center" key={p.id}>
-                <span className="flex-1">
+              <li
+                className="border-b px-4 py-3 gap-4 flex items-center"
+                key={p.id}
+              >
+                <img
+                  src={p.image}
+                  alt={`${p.name} image`}
+                  className="w-12 h-12"
+                />
+
+                <span className="flex-1 text-lg">
                   <Link href={`/${p.id}`}>
                     {p.name}
                     {` (${p.id})`}
