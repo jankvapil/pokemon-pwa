@@ -13,6 +13,11 @@ import { FC, useState } from 'react'
 import type { Database } from '@/components/providers/evoluProvider'
 import { prompt } from '@/lib/utils/prompt'
 
+import QRCode from 'react-qr-code'
+import { Scanner } from '@yudiel/react-qr-scanner'
+import { Result } from '@zxing/library'
+import { cons } from 'effect/List'
+
 export const OwnerActions: FC = () => {
   const evolu = useEvolu<Database>()
   const owner = useOwner()
@@ -52,30 +57,34 @@ export const OwnerActions: FC = () => {
   }
 
   return (
-    <div className="mt-6">
+    <div className="mt-6 flex flex-col gap-4 items-center">
       <p>
         Open this page on a different device and use your mnemonic to restore
         your data.
       </p>
-      <button
-        className="_btn"
-        onClick={(): void => setShowMnemonic(!showMnemonic)}
-      >
-        {`${showMnemonic ? 'Hide' : 'Show'} Mnemonic`}
-      </button>
-      <button className="_btn" onClick={handleRestoreOwnerClick}>
+
+      <button className="_btn w-48" onClick={handleRestoreOwnerClick}>
         Restore Owner
       </button>
-      <button className="_btn" onClick={handleResetOwnerClick}>
+      <Scanner onResult={(res) => alert(res)} />
+
+      <button className="_btn w-48" onClick={handleResetOwnerClick}>
         Reset Owner
       </button>
-      {showMnemonic && owner != null && (
-        <div>
+      {owner != null && (
+        <div className="flex flex-col max-w-48 gap-4 items-center">
           <textarea
             value={owner.mnemonic}
             readOnly
             rows={2}
             style={{ width: 320 }}
+          />
+
+          <QRCode
+            size={256}
+            style={{ height: 'auto', maxWidth: '100%', width: '100%' }}
+            value={owner.mnemonic}
+            viewBox={`0 0 256 256`}
           />
         </div>
       )}
