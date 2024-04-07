@@ -21,24 +21,22 @@ import { cons } from 'effect/List'
 export const OwnerActions: FC = () => {
   const evolu = useEvolu<Database>()
   const owner = useOwner()
-  const [showMnemonic, setShowMnemonic] = useState(false)
+  const [showMnemonicScanner, setShowMnemonicScanner] = useState(false)
 
-  const handleRestoreOwnerClick = (): void => {
-    prompt(NonEmptyString1000, 'Your Mnemonic', (mnemonic: string) => {
-      parseMnemonic(mnemonic)
-        .pipe(Effect.runPromiseExit)
-        .then(
-          Exit.match({
-            onFailure: (error) => {
-              alert(JSON.stringify(error, null, 2))
-            },
-            onSuccess: (mnemonic) => {
-              isRestoringOwner(true)
-              evolu.restoreOwner(mnemonic)
-            },
-          })
-        )
-    })
+  const restoreOwnerByMnemonic = (mnemonic: string) => {
+    parseMnemonic(mnemonic)
+      .pipe(Effect.runPromiseExit)
+      .then(
+        Exit.match({
+          onFailure: (error) => {
+            alert(JSON.stringify(error, null, 2))
+          },
+          onSuccess: (mnemonic) => {
+            isRestoringOwner(true)
+            evolu.restoreOwner(mnemonic)
+          },
+        })
+      )
   }
 
   const isRestoringOwner = (isRestoringOwner?: boolean): boolean => {
@@ -63,28 +61,34 @@ export const OwnerActions: FC = () => {
         your data.
       </p>
 
-      <button className="_btn w-48" onClick={handleRestoreOwnerClick}>
+      <button
+        className="_btn w-48"
+        onClick={() => setShowMnemonicScanner((prev) => !prev)}
+      >
         Restore Owner
       </button>
-      <Scanner onResult={(res) => alert(res)} />
+
+      {showMnemonicScanner && (
+        <Scanner onResult={(res) => restoreOwnerByMnemonic(res)} />
+      )}
 
       <button className="_btn w-48" onClick={handleResetOwnerClick}>
         Reset Owner
       </button>
       {owner != null && (
-        <div className="flex flex-col max-w-48 gap-4 items-center">
-          <textarea
-            value={owner.mnemonic}
-            readOnly
-            rows={2}
-            style={{ width: 320 }}
-          />
-
+        <div className="flex flex-col max-w-48 gap-4 items-center py-8">
           <QRCode
             size={256}
             style={{ height: 'auto', maxWidth: '100%', width: '100%' }}
             value={owner.mnemonic}
             viewBox={`0 0 256 256`}
+          />
+
+          <textarea
+            value={owner.mnemonic}
+            readOnly
+            rows={2}
+            style={{ width: 320 }}
           />
         </div>
       )}
