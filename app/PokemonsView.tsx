@@ -18,6 +18,7 @@ import {
 } from '@/components/providers/evoluProvider'
 import Link from 'next/link'
 import { OwnerActions } from '@/components/ui/OwnerActions'
+import { HeartSVG } from '@/components/ui/Heart'
 
 type IPokemonsList = {
   showFavorites: boolean
@@ -171,24 +172,24 @@ export const PokemonsView = (props: IPokemonsList) => {
 
       {props.showFavorites ? (
         <section>
-          <ul className="py-2">
+          <ul className="py-2 flex flex-wrap">
             {favories.map((fav) => (
-              <li
-                key={fav.id}
-                className="border-b py-3 flex justify-center items-center gap-3"
-              >
-                <img
-                  src={fav.image?.toString()}
-                  alt={`${fav.name} image`}
-                  className="w-16"
-                />
-                <span className="text-lg font-bold">{fav.name}</span>
-                <button
+              <li key={fav.id} className="w-1/2 px-2 py-2">
+                <div className="w-full border py-4 flex flex-col items-center">
+                  <img
+                    src={fav.image?.toString()}
+                    alt={`${fav.name} image`}
+                    className="w-16 h-16"
+                  />
+                  <span className="text-lg font-bold">{fav.name}</span>
+                </div>
+
+                {/* <button
                   className="_btn py-2"
                   onClick={() => handleDeleteClick(fav)}
                 >
                   Delete
-                </button>
+                </button> */}
               </li>
             ))}
           </ul>
@@ -218,19 +219,20 @@ export const PokemonsView = (props: IPokemonsList) => {
                   </span>
 
                   <button
-                    className="border border-gray-200 rounded-full w-10"
+                    className="border border-gray-200 rounded-full w-10 h-10 flex items-center justify-center"
                     onClick={
                       isFavorite ? () => unFavorite(p) : () => makeFavorite(p)
                     }
                   >
-                    <span
+                    <HeartSVG color={isFavorite ? 'red' : 'black'} />
+                    {/* <span
                       className="text-3xl text-red-500"
                       style={{
                         color: isFavorite ? 'red' : 'black',
                       }}
                     >
                       &hearts;
-                    </span>
+                    </span> */}
                   </button>
                 </li>
               )
