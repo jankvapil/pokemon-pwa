@@ -56,9 +56,9 @@ export const OwnerActions: FC = () => {
 
   return (
     <div className="mt-6 flex flex-col gap-4 items-center">
-      <p>
+      <p className="px-8">
         Open this page on a different device and use your mnemonic to restore
-        your data.
+        your favorite pokemons
       </p>
 
       <button

@@ -12,7 +12,10 @@ import {
   useEvolu,
   useQuerySubscription,
 } from '@evolu/react'
-import { type Database } from '@/components/providers/evoluProvider'
+import {
+  NonEmptyString,
+  type Database,
+} from '@/components/providers/evoluProvider'
 import Link from 'next/link'
 import { OwnerActions } from '@/components/ui/OwnerActions'
 
@@ -39,7 +42,7 @@ export const PokemonsView = (props: IPokemonsList) => {
   const favoritesQuery = createQuery((db) =>
     db
       .selectFrom('pokemon')
-      .select(['id', 'name'])
+      .select(['id', 'name', 'image'])
       .where('isDeleted', 'is not', cast(true))
       .where('name', 'is not', null)
       .$narrowType<{ name: NotNull }>()
@@ -48,6 +51,8 @@ export const PokemonsView = (props: IPokemonsList) => {
 
   const sub = useQuerySubscription(favoritesQuery)
   type PokemonRow = ExtractRow<typeof favoritesQuery>
+
+  const [loadedImg, setloadedImg] = useState<string>()
 
   /**
    * Subscribe for favorite pokemons changes in SQLite db
@@ -112,7 +117,15 @@ export const PokemonsView = (props: IPokemonsList) => {
    * Saves pokemon to db
    */
   const makeFavorite = (p: Pokemon) => {
-    create('pokemon', { name: NonEmptyString1000(p.name) })
+    fetch(`/api/proxy-image?url=${p.image}`)
+      .then((response) => response.text())
+      .then((base64String) => {
+        create('pokemon', {
+          name: NonEmptyString1000(p.name),
+          image: NonEmptyString(base64String),
+        })
+      })
+      .catch((error) => console.error('Error fetching image:', error))
   }
 
   /**
@@ -153,7 +166,9 @@ export const PokemonsView = (props: IPokemonsList) => {
 
   const favNames = favories.map((fav) => fav.name)
   return (
-    <div>
+    <div className="min-h-screen">
+      {loadedImg && <img src={loadedImg} alt="My Image" />}
+
       {props.showFavorites ? (
         <section>
           <ul className="py-2">
@@ -162,6 +177,11 @@ export const PokemonsView = (props: IPokemonsList) => {
                 key={fav.id}
                 className="border-b py-3 flex justify-center items-center gap-3"
               >
+                <img
+                  src={fav.image?.toString()}
+                  alt={`${fav.name} image`}
+                  className="w-16"
+                />
                 <span className="text-lg font-bold">{fav.name}</span>
                 <button
                   className="_btn py-2"

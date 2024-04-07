@@ -39,6 +39,12 @@ const NonEmptyString50 = String.pipe(
 )
 type NonEmptyString50 = S.Schema.Type<typeof NonEmptyString50>
 
+export const NonEmptyString = String.pipe(
+  S.minLength(1),
+  S.brand('NonEmptyString')
+)
+export type NonEmptyString = S.Schema.Type<typeof NonEmptyString50>
+
 // Now we can define tables.
 const TodoTable = table({
   id: TodoId,
@@ -64,6 +70,7 @@ type TodoCategoryTable = S.Schema.Type<typeof TodoCategoryTable>
 const PokemonTable = table({
   id: TodoId,
   name: NonEmptyString1000,
+  image: NonEmptyString,
 })
 type PokemonTable = S.Schema.Type<typeof PokemonTable>
 
