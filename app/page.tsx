@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { PokemonsList } from './PokemonsList'
+import { PokemonsView } from './PokemonsView'
 import { useSwipe } from '@/components/hooks/useSwipe'
 
 export default function Page() {
@@ -10,6 +10,7 @@ export default function Page() {
 
   return (
     <div
+      className="max-w-2xl m-auto min-h-screen"
       onTouchStart={(e) => swipeHandlers.onTouchStart(e)}
       onTouchMove={(e) => swipeHandlers.onTouchMove(e)}
       onTouchEnd={() =>
@@ -41,7 +42,7 @@ export default function Page() {
           Favorites
         </button>
       </header>
-      <PokemonsList
+      <PokemonsView
         showFavorites={showFavorites}
         setShowFavorites={setShowFavorites}
       />

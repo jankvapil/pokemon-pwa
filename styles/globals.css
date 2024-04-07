@@ -8,6 +8,6 @@
   }
 
   ._btn {
-    @apply border px-4 hover:bg-black hover:text-white
+    @apply border px-4 py-2 hover:bg-black hover:text-white
   }
 }

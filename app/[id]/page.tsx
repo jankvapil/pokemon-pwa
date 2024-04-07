@@ -11,7 +11,7 @@ type Pokemon = Pick<GraphQLTypes['Pokemon'], 'name' | 'image' | 'types'>
  */
 export default function Page(props: any) {
   const { query } = useGraphQLClient()
-  const [pokemon, setPokemon] = useState<Pokemon | undefined>(undefined)
+  const [pokemon, setPokemon] = useState<Pokemon | undefined>()
 
   useEffect(() => {
     const fetchDetail = async () => {

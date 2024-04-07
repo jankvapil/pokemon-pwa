@@ -57,11 +57,18 @@ export const OwnerActions: FC = () => {
         Open this page on a different device and use your mnemonic to restore
         your data.
       </p>
-      <button onClick={(): void => setShowMnemonic(!showMnemonic)}>
+      <button
+        className="_btn"
+        onClick={(): void => setShowMnemonic(!showMnemonic)}
+      >
         {`${showMnemonic ? 'Hide' : 'Show'} Mnemonic`}
       </button>
-      <button onClick={handleRestoreOwnerClick}>Restore Owner</button>
-      <button onClick={handleResetOwnerClick}>Reset Owner</button>
+      <button className="_btn" onClick={handleRestoreOwnerClick}>
+        Restore Owner
+      </button>
+      <button className="_btn" onClick={handleResetOwnerClick}>
+        Reset Owner
+      </button>
       {showMnemonic && owner != null && (
         <div>
           <textarea

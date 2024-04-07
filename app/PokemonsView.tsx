@@ -10,11 +10,11 @@ import {
   NotNull,
   cast,
   useEvolu,
-  useQuery,
   useQuerySubscription,
 } from '@evolu/react'
 import { type Database } from '@/components/providers/evoluProvider'
 import Link from 'next/link'
+import { OwnerActions } from '@/components/ui/OwnerActions'
 
 type IPokemonsList = {
   showFavorites: boolean
@@ -24,9 +24,9 @@ type IPokemonsList = {
 type Pokemon = Pick<GraphQLTypes['Pokemon'], 'name' | 'id' | 'image'>
 
 /**
- * Pokemons list view
+ * Pokemons view
  */
-export const PokemonsList = (props: IPokemonsList) => {
+export const PokemonsView = (props: IPokemonsList) => {
   const evolu = useEvolu()
   const { query } = useGraphQLClient()
   const { create } = useEvolu<Database>()
@@ -36,20 +36,14 @@ export const PokemonsList = (props: IPokemonsList) => {
   const [offset, setOffset] = useState(0)
   const [pokemons, setPokemons] = useState<Array<Pokemon>>([])
   const [favories, setFavorites] = useState<Readonly<Array<PokemonRow>>>([])
-  const favoritesQuery = createQuery(
-    (db) =>
-      db
-        .selectFrom('pokemon')
-        .select(['id', 'name'])
-        .where('isDeleted', 'is not', cast(true))
-        // Filter null value and ensure non-null type.
-        .where('name', 'is not', null)
-        .$narrowType<{ name: NotNull }>()
-        .orderBy('createdAt'),
-    {
-      // logQueryExecutionTime: true,
-      // logExplainQueryPlan: true,
-    }
+  const favoritesQuery = createQuery((db) =>
+    db
+      .selectFrom('pokemon')
+      .select(['id', 'name'])
+      .where('isDeleted', 'is not', cast(true))
+      .where('name', 'is not', null)
+      .$narrowType<{ name: NotNull }>()
+      .orderBy('createdAt')
   )
 
   const sub = useQuerySubscription(favoritesQuery)
@@ -119,14 +113,23 @@ export const PokemonsList = (props: IPokemonsList) => {
    */
   const makeFavorite = (p: Pokemon) => {
     create('pokemon', { name: NonEmptyString1000(p.name) })
-    props.setShowFavorites(true)
   }
 
   /**
    * Deletes pokemon from db
    */
-  const handleDeleteClick = (row: PokemonRow): void => {
-    update('pokemon', { id: row.id, isDeleted: true })
+  const handleDeleteClick = (fav: PokemonRow): void => {
+    update('pokemon', { id: fav.id, isDeleted: true })
+  }
+
+  /**
+   * Unfavorites pokemon
+   */
+  const unFavorite = (p: Pokemon) => {
+    const fav = favories.find((fav) => fav.name === NonEmptyString1000(p.name))
+    if (fav) {
+      handleDeleteClick(fav)
+    }
   }
 
   /**
@@ -150,60 +153,73 @@ export const PokemonsList = (props: IPokemonsList) => {
 
   const favNames = favories.map((fav) => fav.name)
   return (
-    <>
+    <div>
       {props.showFavorites ? (
-        <ul className="py-2">
-          {favories.map((fav) => (
-            <li
-              key={fav.id}
-              className="border-b py-3 flex justify-center items-center gap-3"
-            >
-              <span className="text-lg font-bold">{fav.name}</span>
-              <button
-                className="_btn py-2"
-                onClick={() => handleDeleteClick(fav)}
+        <section>
+          <ul className="py-2">
+            {favories.map((fav) => (
+              <li
+                key={fav.id}
+                className="border-b py-3 flex justify-center items-center gap-3"
               >
-                Delete
-              </button>
-            </li>
-          ))}
-        </ul>
+                <span className="text-lg font-bold">{fav.name}</span>
+                <button
+                  className="_btn py-2"
+                  onClick={() => handleDeleteClick(fav)}
+                >
+                  Delete
+                </button>
+              </li>
+            ))}
+          </ul>
+          <OwnerActions />
+        </section>
       ) : (
         <section className="flex flex-col gap-4">
           <ul>
-            {pokemons.map((p) => (
-              <li
-                className="border-b px-4 py-3 gap-4 flex items-center"
-                key={p.id}
-              >
-                <img
-                  src={p.image}
-                  alt={`${p.name} image`}
-                  className="w-12 h-12"
-                />
+            {pokemons.map((p) => {
+              const isFavorite = favNames.includes(NonEmptyString1000(p.name))
+              return (
+                <li
+                  className="border-b px-4 py-3 gap-4 flex items-center"
+                  key={p.id}
+                >
+                  <img
+                    src={p.image}
+                    alt={`${p.name} image`}
+                    className="w-12 h-12"
+                  />
 
-                <span className="flex-1 text-lg">
-                  <Link href={`/${p.id}`}>
-                    {p.name}
-                    {` (${p.id})`}
-                  </Link>
-                </span>
+                  <span className="flex-1 text-lg">
+                    <Link href={`/${p.id}`}>
+                      {p.name}
+                      {` (${p.id})`}
+                    </Link>
+                  </span>
 
-                {!favNames.includes(NonEmptyString1000(p.name)) && (
                   <button
-                    className="border border-gray-200 rounded-full w-10 text-xl"
-                    onClick={() => makeFavorite(p)}
+                    className="border border-gray-200 rounded-full w-10"
+                    onClick={
+                      isFavorite ? () => unFavorite(p) : () => makeFavorite(p)
+                    }
                   >
-                    &hearts;
+                    <span
+                      className="text-3xl text-red-500"
+                      style={{
+                        color: isFavorite ? 'red' : 'black',
+                      }}
+                    >
+                      &hearts;
+                    </span>
                   </button>
-                )}
-              </li>
-            ))}
+                </li>
+              )
+            })}
           </ul>
 
           {isLoading && <div>Loading...</div>}
         </section>
       )}
-    </>
+    </div>
   )
 }
