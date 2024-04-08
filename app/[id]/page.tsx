@@ -61,8 +61,8 @@ export default function Page(props: any) {
   }, [])
 
   return (
-    <div>
-      <header className="bg-gray-200 flex flex-col text-center pb-2">
+    <div className="max-w-2xl m-auto min-h-screen">
+      <header className="bg-gray-200 flex flex-col text-center pb-2 md:border-x md:border-x-gray-600">
         <img
           src={pokemon?.image}
           alt="Pokemon image"
@@ -76,7 +76,7 @@ export default function Page(props: any) {
         </ul>
       </header>
 
-      <ul className="flex text-center bg-gray-200 border border-gray-600 border-x-0 mb-8">
+      <ul className="flex text-center bg-gray-200 border border-gray-600 border-x-0 mb-8 md:border-x md:border-x-gray-600">
         <li className="flex-1 py-4 border-r border-r-gray-600">
           <h3 className="font-bold">Weight</h3>
           <span>
@@ -94,7 +94,7 @@ export default function Page(props: any) {
       {pokemon?.evolutions.length !== undefined &&
         pokemon.evolutions.length > 0 && (
           <section className="px-2">
-            <h2 className="text-xl">Evolutions</h2>
+            <h2 className="text-2xl pb-2">Evolutions</h2>
             <ul className="flex gap-2 justify-center">
               {pokemon?.evolutions.map((evolution) => (
                 <li className="border flex-1" key={evolution.name}>
