@@ -161,8 +161,12 @@ export const PokemonsView = (props: IPokemonsList) => {
       setOffset((prev) => prev + 10)
     }
 
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('touchmove', handleScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('touchmove', handleScroll)
+    }
   }, [isLoading])
 
   const favNames = favories.map((fav) => fav.name)
@@ -172,10 +176,10 @@ export const PokemonsView = (props: IPokemonsList) => {
 
       {props.showFavorites ? (
         <section>
-          <ul className="py-2 flex flex-wrap">
+          <ul className="pb-4 flex flex-wrap">
             {favories.map((fav) => (
-              <li key={fav.id} className="w-1/2 px-2 py-2">
-                <div className="w-full border py-4 flex flex-col items-center">
+              <li key={fav.id} className="w-1/2 even:pl-1 odd:pr-1 pt-2">
+                <div className="w-full border pt-4 pb-2 flex flex-col gap-2 items-center">
                   <img
                     src={fav.image?.toString()}
                     alt={`${fav.name} image`}
