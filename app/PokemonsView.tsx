@@ -168,7 +168,7 @@ export const PokemonsView = (props: IPokemonsList) => {
 
   const favNames = favories.map((fav) => fav.name)
   return (
-    <div className="min-h-screen overflow-y-scroll ">
+    <div className="min-h-screen">
       {props.showFavorites ? (
         <section>
           <ul className="pb-4 flex flex-wrap">
