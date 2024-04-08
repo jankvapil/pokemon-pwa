@@ -53,8 +53,6 @@ export const PokemonsView = (props: IPokemonsList) => {
   const sub = useQuerySubscription(favoritesQuery)
   type PokemonRow = ExtractRow<typeof favoritesQuery>
 
-  const [loadedImg, setloadedImg] = useState<string>()
-
   /**
    * Subscribe for favorite pokemons changes in SQLite db
    */
@@ -111,7 +109,9 @@ export const PokemonsView = (props: IPokemonsList) => {
         .finally(() => setIsLoading(false))
     }
 
-    fetchPokemons()
+    if (!isLoading) {
+      fetchPokemons()
+    }
   }, [offset])
 
   /**
@@ -171,8 +171,6 @@ export const PokemonsView = (props: IPokemonsList) => {
   const favNames = favories.map((fav) => fav.name)
   return (
     <div className="min-h-screen">
-      {loadedImg && <img src={loadedImg} alt="My Image" />}
-
       {props.showFavorites ? (
         <section>
           <ul className="pb-4 flex flex-wrap">
