@@ -1,6 +1,6 @@
 {
-  "name": "next-pwa",
-  "short_name": "next-pwa",
+  "name": "Pokemon Viewer",
+  "short_name": "pokemon-viewer",
   "display": "standalone",
   "orientation": "portrait",
   "theme_color": "#FFFFFF",
