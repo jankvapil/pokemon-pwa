@@ -1,7 +1,14 @@
 'use client'
 
 import { useGraphQLClient } from '@/components/hooks/useGraphQLClient'
-import { Dispatch, SetStateAction, use, useEffect, useState } from 'react'
+import {
+  Dispatch,
+  SetStateAction,
+  use,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { GraphQLTypes } from '@/lib/graphql/zeus'
 
 import {
@@ -19,6 +26,7 @@ import {
 import Link from 'next/link'
 import { OwnerActions } from '@/components/ui/OwnerActions'
 import { HeartSVG } from '@/components/ui/Heart'
+import { useIntersectionObserver } from 'usehooks-ts'
 
 type IPokemonsList = {
   showFavorites: boolean
@@ -149,28 +157,18 @@ export const PokemonsView = (props: IPokemonsList) => {
   /**
    * Infifinite scroll
    */
+  const { isIntersecting, ref } = useIntersectionObserver({
+    threshold: 0.5,
+  })
   useEffect(() => {
-    const handleScroll = () => {
-      const windowHeight = window.innerHeight
-      const documentHeight = document.documentElement.offsetHeight
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop
-
-      if (windowHeight + scrollTop >= documentHeight - 100 || isLoading) {
-        setOffset((prevOffset) => prevOffset + 10)
-      }
+    if (isIntersecting && pokemons.length > 0) {
+      setOffset((prevOffset) => prevOffset + 20)
     }
-
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    // window.addEventListener('touchmove', handleScroll, { passive: true })
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-      // window.removeEventListener('touchmove', handleScroll)
-    }
-  }, [isLoading])
+  }, [isIntersecting])
 
   const favNames = favories.map((fav) => fav.name)
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen overflow-y-scroll ">
       {props.showFavorites ? (
         <section>
           <ul className="pb-4 flex flex-wrap">
@@ -240,7 +238,7 @@ export const PokemonsView = (props: IPokemonsList) => {
             })}
           </ul>
 
-          {isLoading && <div>Loading...</div>}
+          <div ref={ref} />
         </section>
       )}
     </div>
