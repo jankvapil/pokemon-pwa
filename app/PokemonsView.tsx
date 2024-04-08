@@ -161,7 +161,7 @@ export const PokemonsView = (props: IPokemonsList) => {
     threshold: 0.5,
   })
   useEffect(() => {
-    if (isIntersecting && pokemons.length > 0) {
+    if (!props.showFavorites && isIntersecting && pokemons.length > 0) {
       setOffset((prevOffset) => prevOffset + 20)
     }
   }, [isIntersecting])
@@ -182,13 +182,6 @@ export const PokemonsView = (props: IPokemonsList) => {
                   />
                   <span className="text-lg font-bold">{fav.name}</span>
                 </div>
-
-                {/* <button
-                  className="_btn py-2"
-                  onClick={() => handleDeleteClick(fav)}
-                >
-                  Delete
-                </button> */}
               </li>
             ))}
           </ul>
@@ -210,11 +203,8 @@ export const PokemonsView = (props: IPokemonsList) => {
                     className="w-12 h-12"
                   />
 
-                  <span className="flex-1 text-lg">
-                    <Link href={`/${p.id}`}>
-                      {p.name}
-                      {` (${p.id})`}
-                    </Link>
+                  <span className="flex-1 text-lg font-bold">
+                    <Link href={`/${p.id}`}>{p.name}</Link>
                   </span>
 
                   <button
@@ -224,14 +214,6 @@ export const PokemonsView = (props: IPokemonsList) => {
                     }
                   >
                     <HeartSVG color={isFavorite ? 'red' : 'black'} />
-                    {/* <span
-                      className="text-3xl text-red-500"
-                      style={{
-                        color: isFavorite ? 'red' : 'black',
-                      }}
-                    >
-                      &hearts;
-                    </span> */}
                   </button>
                 </li>
               )

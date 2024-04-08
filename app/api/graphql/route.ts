@@ -4,6 +4,7 @@ import { startServerAndCreateNextHandler } from '@as-integrations/next'
 import { ApolloServer } from '@apollo/server'
 import { NextRequest } from 'next/server'
 import { gql } from 'graphql-tag'
+import * as _ from 'lodash'
 
 const pokemonsData = require('./pokemons')
 

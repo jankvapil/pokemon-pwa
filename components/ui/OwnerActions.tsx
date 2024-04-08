@@ -56,11 +56,7 @@ export const OwnerActions: FC = () => {
 
   return (
     <div className="flex flex-col gap-4 items-center">
-      <p className="px-8">
-        Open this page on a different device and use your mnemonic to restore
-        your favorite pokemons
-      </p>
-
+      <h2 className="px-8 text-lg">Share with other devices</h2>
       <button
         className="_btn w-48"
         onClick={() => setShowMnemonicScanner((prev) => !prev)}
@@ -76,19 +72,12 @@ export const OwnerActions: FC = () => {
         Reset Owner
       </button>
       {owner != null && (
-        <div className="flex flex-col max-w-48 gap-4 items-center py-8">
+        <div className="flex flex-col max-w-48 gap-4 items-center pb-8">
           <QRCode
             size={256}
             style={{ height: 'auto', maxWidth: '100%', width: '100%' }}
             value={owner.mnemonic}
             viewBox={`0 0 256 256`}
-          />
-
-          <textarea
-            value={owner.mnemonic}
-            readOnly
-            rows={2}
-            style={{ width: 320 }}
           />
         </div>
       )}
