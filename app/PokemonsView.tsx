@@ -151,14 +151,13 @@ export const PokemonsView = (props: IPokemonsList) => {
    */
   useEffect(() => {
     const handleScroll = () => {
-      if (
-        window.innerHeight + document.documentElement.scrollTop !==
-          document.documentElement.offsetHeight ||
-        isLoading
-      )
-        return
+      const windowHeight = window.innerHeight
+      const documentHeight = document.documentElement.offsetHeight
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop
 
-      setOffset((prev) => prev + 10)
+      if (windowHeight + scrollTop >= documentHeight - 100 || isLoading) {
+        setOffset((prevOffset) => prevOffset + 10)
+      }
     }
 
     window.addEventListener('scroll', handleScroll, { passive: true })
