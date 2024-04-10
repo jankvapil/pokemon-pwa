@@ -1,22 +1,13 @@
 'use client'
 
-import {
-  NonEmptyString1000,
-  canUseDom,
-  parseMnemonic,
-  useEvolu,
-  useOwner,
-} from '@evolu/react'
+import { canUseDom, parseMnemonic, useEvolu, useOwner } from '@evolu/react'
 import { Effect, Exit } from 'effect'
 import { FC, useState } from 'react'
 
 import type { Database } from '@/components/providers/evoluProvider'
-import { prompt } from '@/lib/utils/prompt'
 
 import QRCode from 'react-qr-code'
 import { Scanner } from '@yudiel/react-qr-scanner'
-import { Result } from '@zxing/library'
-import { cons } from 'effect/List'
 
 export const OwnerActions: FC = () => {
   const evolu = useEvolu<Database>()

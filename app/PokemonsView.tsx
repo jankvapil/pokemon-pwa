@@ -1,14 +1,7 @@
 'use client'
 
 import { useGraphQLClient } from '@/components/hooks/useGraphQLClient'
-import {
-  Dispatch,
-  SetStateAction,
-  use,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
+import { Dispatch, FormEvent, SetStateAction, useEffect, useState } from 'react'
 import { GraphQLTypes } from '@/lib/graphql/zeus'
 
 import {
@@ -48,6 +41,7 @@ export const PokemonsView = (props: IPokemonsList) => {
   const [offset, setOffset] = useState(0)
   const [pokemons, setPokemons] = useState<Array<Pokemon>>([])
   const [types, setTypes] = useState<Array<string>>([])
+  const [search, setSearch] = useState('')
   const [filterType, setFilterType] = useState('')
   const [favories, setFavorites] = useState<Readonly<Array<PokemonRow>>>([])
   const favoritesQuery = createQuery((db) =>
@@ -88,9 +82,6 @@ export const PokemonsView = (props: IPokemonsList) => {
    * Fetch pokemons on page load or offset changes
    */
   useEffect(() => {
-    console.log('useEffect')
-    console.log(filterType)
-
     const fetchPokemons = async () => {
       setIsLoading(true)
       query({
@@ -102,6 +93,7 @@ export const PokemonsView = (props: IPokemonsList) => {
               filter: {
                 type: filterType,
               },
+              search: search,
             },
           },
           {
@@ -116,29 +108,41 @@ export const PokemonsView = (props: IPokemonsList) => {
         pokemonTypes: true,
       })
         .then((res) => {
-          console.log(res)
+          // console.log(res)
 
           setTypes(res.pokemonTypes)
           setPokemons((prev) => {
             let newPrev = prev
+
+            // filter previous pokemons with different name
+            if (search !== '') {
+              newPrev = newPrev.filter((p) => p.name.includes(search))
+            }
+
+            // filter previous pokemons with different type
             if (filterType !== '') {
               newPrev = newPrev.filter((p) => p.types.includes(filterType))
             }
 
             const filtered = res.pokemons.edges.filter(
-              (p) => !prev.map((p2) => p2.id).includes(p.id)
+              (p) => !newPrev.map((p2) => p2.id).includes(p.id)
             )
+
+            console.log(filtered)
             return [...newPrev, ...filtered]
           })
         })
         .catch((err) => console.error(err))
-        .finally(() => setIsLoading(false))
+        .finally(() => setTimeout(() => setIsLoading(false), 200))
     }
 
     if (!isLoading) {
+      // console.log('useEffect')
+      // console.log('search', search)
+      // console.log('filterType', filterType)
       fetchPokemons()
     }
-  }, [offset, filterType])
+  }, [offset, filterType, search])
 
   /**
    * Saves pokemon to db
@@ -185,6 +189,22 @@ export const PokemonsView = (props: IPokemonsList) => {
   }, [isIntersecting])
 
   const favNames = favories.map((fav) => fav.name)
+
+  const handleSearch = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    const form = event.currentTarget
+
+    // Access the input field by its id
+    const input = form.elements.namedItem('search') as HTMLInputElement
+
+    // Get the value of the input field
+    const inputValue = input.value
+
+    console.log(inputValue)
+    setSearch(inputValue)
+  }
+
   return (
     <div className="min-h-screen">
       {props.showFavorites ? (
@@ -207,20 +227,25 @@ export const PokemonsView = (props: IPokemonsList) => {
         </section>
       ) : (
         <section className="flex flex-col gap-4">
-          <select
-            className="p-2 m-2 mb-0 border"
-            onChange={(e) => setFilterType(e.target.value)}
-          >
-            <option value="" disabled selected hidden>
-              Filter pokemons by type
-            </option>
-            <option key="" value=""></option>
-            {types.map((type) => (
-              <option key={type} value={type}>
-                {type}
+          <div className="flex m-2 mb-0 gap-2">
+            <form className="flex-1" onSubmit={handleSearch}>
+              <input type="text" id="search" className="p-2 border w-full" />
+            </form>
+            <select
+              className="p-2 border"
+              onChange={(e) => setFilterType(e.target.value)}
+            >
+              <option value="" disabled selected hidden>
+                Filter by type
               </option>
-            ))}
-          </select>
+              <option key="" value=""></option>
+              {types.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
+          </div>
           <ul>
             {pokemons.map((p) => {
               const isFavorite = favNames.includes(NonEmptyString1000(p.name))
