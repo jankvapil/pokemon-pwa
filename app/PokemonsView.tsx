@@ -33,7 +33,7 @@ type IPokemonsList = {
   setShowFavorites: Dispatch<SetStateAction<boolean>>
 }
 
-type Pokemon = Pick<GraphQLTypes['Pokemon'], 'name' | 'id' | 'image'>
+type Pokemon = Pick<GraphQLTypes['Pokemon'], 'name' | 'id' | 'image' | 'types'>
 
 /**
  * Pokemons view
@@ -47,6 +47,8 @@ export const PokemonsView = (props: IPokemonsList) => {
   const [isLoading, setIsLoading] = useState(false)
   const [offset, setOffset] = useState(0)
   const [pokemons, setPokemons] = useState<Array<Pokemon>>([])
+  const [types, setTypes] = useState<Array<string>>([])
+  const [filterType, setFilterType] = useState('')
   const [favories, setFavorites] = useState<Readonly<Array<PokemonRow>>>([])
   const favoritesQuery = createQuery((db) =>
     db
@@ -86,6 +88,9 @@ export const PokemonsView = (props: IPokemonsList) => {
    * Fetch pokemons on page load or offset changes
    */
   useEffect(() => {
+    console.log('useEffect')
+    console.log(filterType)
+
     const fetchPokemons = async () => {
       setIsLoading(true)
       query({
@@ -94,6 +99,9 @@ export const PokemonsView = (props: IPokemonsList) => {
             query: {
               offset: offset,
               limit: 20,
+              filter: {
+                type: filterType,
+              },
             },
           },
           {
@@ -101,16 +109,26 @@ export const PokemonsView = (props: IPokemonsList) => {
               id: true,
               name: true,
               image: true,
+              types: true,
             },
           },
         ],
+        pokemonTypes: true,
       })
         .then((res) => {
+          console.log(res)
+
+          setTypes(res.pokemonTypes)
           setPokemons((prev) => {
+            let newPrev = prev
+            if (filterType !== '') {
+              newPrev = newPrev.filter((p) => p.types.includes(filterType))
+            }
+
             const filtered = res.pokemons.edges.filter(
               (p) => !prev.map((p2) => p2.id).includes(p.id)
             )
-            return [...prev, ...filtered]
+            return [...newPrev, ...filtered]
           })
         })
         .catch((err) => console.error(err))
@@ -120,7 +138,7 @@ export const PokemonsView = (props: IPokemonsList) => {
     if (!isLoading) {
       fetchPokemons()
     }
-  }, [offset])
+  }, [offset, filterType])
 
   /**
    * Saves pokemon to db
@@ -189,6 +207,20 @@ export const PokemonsView = (props: IPokemonsList) => {
         </section>
       ) : (
         <section className="flex flex-col gap-4">
+          <select
+            className="p-2 m-2 mb-0 border"
+            onChange={(e) => setFilterType(e.target.value)}
+          >
+            <option value="" disabled selected hidden>
+              Filter pokemons by type
+            </option>
+            <option key="" value=""></option>
+            {types.map((type) => (
+              <option key={type} value={type}>
+                {type}
+              </option>
+            ))}
+          </select>
           <ul>
             {pokemons.map((p) => {
               const isFavorite = favNames.includes(NonEmptyString1000(p.name))
