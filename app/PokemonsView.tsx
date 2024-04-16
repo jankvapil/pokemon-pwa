@@ -92,7 +92,7 @@ export const PokemonsView = (props: IPokemonsList) => {
   }, [])
 
   /**
-   * Fetch pokemons on page load or offset changes
+   * Fetch pokemons on page load, offset changes or form change
    */
   useEffect(() => {
     const fetchPokemons = async () => {

@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react'
 type Pokemon = Pick<
   GraphQLTypes['Pokemon'],
   | 'name'
+  | 'classification'
   | 'image'
   | 'types'
   | 'evolutions'
@@ -33,6 +34,7 @@ export default function Page(props: any) {
           },
           {
             name: true,
+            classification: true,
             image: true,
             types: true,
             maxHP: true,
@@ -68,11 +70,23 @@ export default function Page(props: any) {
           alt="Pokemon image"
           className="rounded-full border border-gray-600 m-6 mb-0 w-64 h-64 self-center"
         />
-        <h1 className="_h1 pt-2">{pokemon?.name}</h1>
-        <ul className="flex gap-2 justify-center">
+        <h1 className="_h1 pt-4">{pokemon?.name}</h1>
+        <ul className="flex gap-2 justify-center -mt-1">
           {pokemon?.types.map((type) => (
             <li key={type}>{type}</li>
           ))}
+        </ul>
+
+        <ul className="flex flex-col gap-1 px-2 py-4">
+          <li className="flex items-center gap-2">
+            <div className="flex-1 border bg-indigo-400 rounded-full h-4" />
+            <span className="font-semibold w-16">CP: {pokemon?.maxCP}</span>
+          </li>
+
+          <li className="flex items-center gap-2">
+            <div className="flex-1 border bg-emerald-400 rounded-full h-4" />
+            <span className="font-semibold w-16">HP: {pokemon?.maxHP}</span>
+          </li>
         </ul>
       </header>
 
@@ -90,6 +104,8 @@ export default function Page(props: any) {
           </span>
         </li>
       </ul>
+
+      <p className="mb-2 px-2">{pokemon?.classification}</p>
 
       {pokemon?.evolutions.length !== undefined &&
         pokemon.evolutions.length > 0 && (
