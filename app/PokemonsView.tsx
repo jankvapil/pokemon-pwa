@@ -1,7 +1,15 @@
 'use client'
 
 import { useGraphQLClient } from '@/components/hooks/useGraphQLClient'
-import { Dispatch, FormEvent, SetStateAction, useEffect, useState } from 'react'
+import {
+  ChangeEvent,
+  Dispatch,
+  FormEvent,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { GraphQLTypes } from '@/lib/graphql/zeus'
 
 import {
@@ -41,8 +49,13 @@ export const PokemonsView = (props: IPokemonsList) => {
   const [offset, setOffset] = useState(0)
   const [pokemons, setPokemons] = useState<Array<Pokemon>>([])
   const [types, setTypes] = useState<Array<string>>([])
-  const [search, setSearch] = useState('')
-  const [filterType, setFilterType] = useState('')
+
+  // helper state
+  const [formChanged, setFormChanged] = useState(0)
+
+  const searchRef = useRef('')
+  const filterTypeRef = useRef('')
+
   const [favories, setFavorites] = useState<Readonly<Array<PokemonRow>>>([])
   const favoritesQuery = createQuery((db) =>
     db
@@ -91,9 +104,9 @@ export const PokemonsView = (props: IPokemonsList) => {
               offset: offset,
               limit: 20,
               filter: {
-                type: filterType,
+                type: filterTypeRef.current,
               },
-              search: search,
+              search: searchRef.current,
             },
           },
           {
@@ -108,28 +121,18 @@ export const PokemonsView = (props: IPokemonsList) => {
         pokemonTypes: true,
       })
         .then((res) => {
-          // console.log(res)
-
           setTypes(res.pokemonTypes)
           setPokemons((prev) => {
             let newPrev = prev
 
-            // filter previous pokemons with different name
-            if (search !== '') {
-              newPrev = newPrev.filter((p) => p.name.includes(search))
-            }
-
-            // filter previous pokemons with different type
-            if (filterType !== '') {
-              newPrev = newPrev.filter((p) => p.types.includes(filterType))
-            }
-
+            // if previous pokemons contains a new loaded pokemons, filter them
             const filtered = res.pokemons.edges.filter(
-              (p) => !newPrev.map((p2) => p2.id).includes(p.id)
+              (p) => !newPrev.map((prev) => prev.id).includes(p.id)
             )
 
-            console.log(filtered)
-            return [...newPrev, ...filtered]
+            return [...newPrev, ...filtered].sort((a, b) =>
+              a.id.localeCompare(b.id)
+            )
           })
         })
         .catch((err) => console.error(err))
@@ -137,12 +140,9 @@ export const PokemonsView = (props: IPokemonsList) => {
     }
 
     if (!isLoading) {
-      // console.log('useEffect')
-      // console.log('search', search)
-      // console.log('filterType', filterType)
       fetchPokemons()
     }
-  }, [offset, filterType, search])
+  }, [offset, formChanged])
 
   /**
    * Saves pokemon to db
@@ -178,6 +178,8 @@ export const PokemonsView = (props: IPokemonsList) => {
 
   /**
    * Infifinite scroll
+   *
+   * - when referenced div is reached, increase offset
    */
   const { isIntersecting, ref } = useIntersectionObserver({
     threshold: 0.5,
@@ -188,23 +190,46 @@ export const PokemonsView = (props: IPokemonsList) => {
     }
   }, [isIntersecting])
 
-  const favNames = favories.map((fav) => fav.name)
-
-  const handleSearch = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-
-    const form = event.currentTarget
-
-    // Access the input field by its id
+  /**
+   * Handles search
+   *
+   * - reset offset & pokemons
+   * - refetch pokemons with applied filters
+   */
+  const handleSearch = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const form = e.currentTarget
     const input = form.elements.namedItem('search') as HTMLInputElement
-
-    // Get the value of the input field
     const inputValue = input.value
 
-    console.log(inputValue)
-    setSearch(inputValue)
+    searchRef.current = inputValue
+    setOffset((prev) => {
+      if (prev === 0) {
+        setFormChanged((prev) => prev + 1)
+      }
+      return 0
+    })
+    setPokemons([])
   }
 
+  /**
+   * Handle filter by type
+   *
+   * - reset offset & pokemons
+   * - refetch pokemons with applied filters
+   */
+  const handleFilterByType = (e: ChangeEvent<HTMLSelectElement>) => {
+    filterTypeRef.current = e.target.value
+    setOffset((prev) => {
+      if (prev === 0) {
+        setFormChanged((prev) => prev + 1)
+      }
+      return 0
+    })
+    setPokemons([])
+  }
+
+  const favNames = favories.map((fav) => fav.name)
   return (
     <div className="min-h-screen">
       {props.showFavorites ? (
@@ -232,11 +257,11 @@ export const PokemonsView = (props: IPokemonsList) => {
               <input type="text" id="search" className="p-2 border w-full" />
             </form>
             <select
-              className="p-2 border"
-              onChange={(e) => setFilterType(e.target.value)}
+              className="p-2 border text-gray-700 w-24 cursor-pointer"
+              onChange={handleFilterByType}
             >
               <option value="" disabled selected hidden>
-                Filter by type
+                Type
               </option>
               <option key="" value=""></option>
               {types.map((type) => (
@@ -261,7 +286,9 @@ export const PokemonsView = (props: IPokemonsList) => {
                   />
 
                   <span className="flex-1 text-lg font-bold">
-                    <Link href={`/${p.id}`}>{p.name}</Link>
+                    <Link href={`/${p.id}`}>
+                      {p.name} ({p.id})
+                    </Link>
                   </span>
 
                   <button

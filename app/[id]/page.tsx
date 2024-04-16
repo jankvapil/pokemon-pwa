@@ -66,7 +66,7 @@ export default function Page(props: any) {
         <img
           src={pokemon?.image}
           alt="Pokemon image"
-          className="rounded-full m-6 mb-0 w-64 h-64 self-center"
+          className="rounded-full border border-gray-600 m-6 mb-0 w-64 h-64 self-center"
         />
         <h1 className="_h1 pt-2">{pokemon?.name}</h1>
         <ul className="flex gap-2 justify-center">
