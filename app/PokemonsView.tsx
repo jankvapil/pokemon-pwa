@@ -191,7 +191,7 @@ export const PokemonsView = (props: IPokemonsList) => {
   }, [isIntersecting])
 
   /**
-   * Handles search
+   * Handles search after the form is submitted
    *
    * - reset offset & pokemons
    * - refetch pokemons with applied filters
@@ -286,9 +286,7 @@ export const PokemonsView = (props: IPokemonsList) => {
                   />
 
                   <span className="flex-1 text-lg font-bold">
-                    <Link href={`/${p.id}`}>
-                      {p.name} ({p.id})
-                    </Link>
+                    <Link href={`/${p.id}`}>{p.name}</Link>
                   </span>
 
                   <button

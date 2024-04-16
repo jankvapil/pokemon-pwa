@@ -2,6 +2,7 @@
   "name": "pokemon-viewer",
   "version": "1.0.0",
   "license": "MIT",
+  "author": "Jan Kvapil",
   "private": true,
   "scripts": {
     "dev": "next dev",

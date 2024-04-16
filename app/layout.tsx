@@ -4,14 +4,14 @@ import { EvoluProvider } from '@/components/providers/evoluProvider'
 import type { Metadata, Viewport } from 'next'
 import type { ReactNode } from 'react'
 
-const APP_NAME = 'Pokemon Viewer'
-const APP_DESCRIPTION = 'This is a PWA local-first Pokemon Viewer'
+const APP_NAME = 'Pokémon Viewer'
+const APP_DESCRIPTION = 'This is a PWA local-first Pokémon Viewer'
 
 export const metadata: Metadata = {
   applicationName: APP_NAME,
   title: {
     default: APP_NAME,
-    template: '%s - Pokemon Viewer',
+    template: '%s - Pokémon Viewer',
   },
   description: APP_DESCRIPTION,
   manifest: '/manifest.json',

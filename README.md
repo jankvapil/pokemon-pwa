@@ -1,36 +1,16 @@
-# next-pwa - basic
+# Local-first PWA Pokémon Viewer
 
-This example demonstrates how to use `next-pwa`.
+| All Pokémons               | Favorite Pokémons                |
+| -------------------------- | -------------------------------- |
+| ![alt text](image-all.png) | ![alt text](image-favorites.png) |
 
-## Usage
+This is a PWA, primarily designed for mobile devices
 
-[![Open in Gitpod and run](https://img.shields.io/badge/Open%20In-Gitpod.io-%231966D2?style=for-the-badge&logo=gitpod)](https://gitpod.io/#https://github.com/DuCanhGH/next-pwa/)
-
-```bash
-cd examples/basic
-pnpm build
-pnpm start
-```
-
-or
-
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init), [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/), or [pnpm](https://pnpm.io) to bootstrap the example:
-
-```bash
-npx create-next-app --example https://github.com/DuCanhGH/next-pwa/tree/master/examples/basic basic-app
-```
-
-```bash
-yarn create next-app --example https://github.com/DuCanhGH/next-pwa/tree/master/examples/basic basic-app
-```
-
-```bash
-pnpm create next-app --example https://github.com/DuCanhGH/next-pwa/tree/master/examples/basic basic-app
-```
-
-## Recommended `.gitignore`
-
-```gitignore
-**/public/workbox-*.js
-**/public/sw.js
-```
+- PWA is based on the Next.js project, which integrates a sample GraphQL API
+- The GraphQL API only allows to fetch pokémon data, the list of fetched pokémon is displayed on the main page of the application (All tab). It implements an infinite scroll, where additional pokémon are loaded in sequence. Clicking on the name of a Pokémon takes you to the detail
+- To search for a Pokémon you can limit the selection by filtering by type or by name
+- Local-first approach is chosen for storing favorite pokémons
+- To do this there is a proxy endpoint API for loading images and converting them to base64
+- So locally, when you click on the heart icon, the name of the Pokémon and its image is saved in the WASM SQLite database
+- Locally stored Pokémon can be viewed offline
+- It is also possible to share a selection of favorite Pokémon by scanning the QR code with other devices
